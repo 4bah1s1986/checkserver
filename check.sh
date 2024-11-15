@@ -66,8 +66,11 @@ f_main () {
         httpd -v
 
         f_section "PHP version";
-        apt list --installed|grep libphp;
-        rpm -qa|grep php|grep cli;
+        for php in /usr/bin/php /usr/bin/php[0-9]*; do
+          if [ -x "$php" ] && [[ "$php" =~ ^/usr/bin/php[0-9.]*$ ]]; then
+            echo "$php version: $($php -v 2>/dev/null | head -n1)"
+	  fi
+        done
 
 	f_section "MariaDB/MySQL";
 	mysql --version;
